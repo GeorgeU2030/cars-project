@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
 import { CarsService } from './cars.service';
-import { Car } from './cars.entity';
+import { createCarDto } from './dto/create-car.dto';
+import { updateCarDto } from './dto/update-car.dto';
 
 @Controller('cars')
 export class CarsController {
@@ -11,7 +12,7 @@ export class CarsController {
     }
 
     @Post()
-    async create(@Body() car: Car){
+    async create(@Body() car: createCarDto){
         return this.carsService.create(car)
     }
 
@@ -21,17 +22,18 @@ export class CarsController {
     }
 
     @Get(':id')
-    async findOne(id: number){
+    async findOne(@Param('id') id: number){
         return this.carsService.findOne(id)
     }
 
     @Put(':id')
-    async update(@Body() car: Car, id: number){
+    async update(@Body() car: updateCarDto, @Param('id') id: number){
         return this.carsService.update(id, car)
     }
 
     @Delete(':id')
-    async remove(id: number){
+    @HttpCode(204)
+    async remove(@Param('id') id: number){
         return this.carsService.remove(id)
     }
 
